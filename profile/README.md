@@ -39,6 +39,25 @@ PR 자동 감지
 
 > 현재는 레포 등록 → PR 감지 → AI 리뷰 → PR 코멘트까지 동작하며, A~D 검사를 순서대로 붙이는 중입니다.
 
+## 인프라 구조
+
+```mermaid
+flowchart LR
+    U["사용자"] --> W["pr-guard-web<br>Next.js · Vercel"]
+    W -->|REST| A["pr-guard-api<br>Spring Boot · Railway"]
+    A --> DB[("PostgreSQL<br>Railway")]
+    A -->|"PR 조회 · 코멘트"| G["GitHub API"]
+    A -->|리뷰| O["OpenAI API"]
+    G --- R["등록된 public 레포"]
+```
+
+| 구성 | 위치 | 역할 |
+|---|---|---|
+| 프론트엔드 | Vercel | 레포 등록, PR·리뷰 결과 화면. 백엔드는 서버에서만 호출 |
+| 백엔드 | Railway | 5분마다 열린 PR 폴링, 새 커밋이 보이면 리뷰 작업 생성·처리 |
+| DB | Railway PostgreSQL | 프로젝트·PR·리뷰 기록. 외부 공개 없이 백엔드만 내부망으로 접속 |
+| 외부 API | GitHub, OpenAI | PR·diff 조회와 코멘트 작성 / LLM 리뷰 |
+
 ## 레포지토리
 
 | 레포 | 설명 |
