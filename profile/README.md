@@ -122,10 +122,25 @@ base / head 소스 인덱스 → 바뀐 메서드 · 호출부 · git 이력
 
 ### 8. 평가
 
-| 항목 | diff 만 LLM 에 넣은 기준선 | PR Guard |
+sandbox 평가 PR 23개 (문제 PR 16개 · 정답 지적 20개 · 정상 PR 7개). 문제 PR 은 AI 가 쓴 코드에서 자주 보이는 실수 유형으로 만들었고, #10~#24 의 문제 PR 은 모두 **컴파일되고 기존 테스트를 통과한다** — 테스트 통과만으로는 머지 여부를 판단할 수 없는 PR 들이다.
+
+| 항목 | PR Guard |
+|---|---|
+| 문제 탐지 | **19 / 20** |
+| 판정 적절 | **21 / 23** |
+| 문제 PR 을 "머지 가능"으로 흘림 | **0 / 16** |
+| 정상 PR 자동 통과 (사람이 깊게 안 봐도 되는 PR) | **5 / 7** |
+| 리뷰 소요 시간 | 중앙값 19초 · 최대 36초 |
+
+AI 실수 유형별 탐지: 요청하지 않은 변경 2/2 · 빠진 구현 2/2 · 조용한 동작 변경 4/4 · 깨지는 호출부 1/2 · 보안 회귀 5/5 · 스키마 불일치 2/2 · 환각 의존성 1/1 · 레포 맥락 무시 1/1 · 테스트 약화 1/1
+
+diff 만 LLM 에 넣은 기준선과 비교 (#2~#9):
+
+| 항목 | 기준선 | PR Guard |
 |---|---|---|
-| 문제 탐지 (sandbox 평가 PR) | 7 / 10 | **9 / 10** |
+| 문제 탐지 | 7 / 10 | **9 / 10** |
 | 판정 적절 | 7 / 8 | **8 / 8** |
+| 정상 PR 자동 통과 | 0 / 1 | **1 / 1** |
 
 `pr-guard-api/eval` 의 정답표와 채점 스크립트로 잰다.
 
@@ -160,7 +175,7 @@ flowchart LR
 |---|---|
 | [pr-guard-api](https://github.com/dongguk-creative-fusion-2026/pr-guard-api) | 백엔드 — PR 폴링, 분석 파이프라인, 실행 검증, 리뷰 코멘트 (Spring Boot) |
 | [pr-guard-web](https://github.com/dongguk-creative-fusion-2026/pr-guard-web) | 프론트엔드 — 리뷰 파이프라인, 코드 그래프, 코드 인사이트 (Next.js) |
-| [pr-guard-sandbox](https://github.com/dongguk-creative-fusion-2026/pr-guard-sandbox) | 테스트 · 평가용 레포 (평가 PR #1~#9) |
+| [pr-guard-sandbox](https://github.com/dongguk-creative-fusion-2026/pr-guard-sandbox) | 테스트 · 평가용 레포 (평가 PR #1~#24) |
 | [demo-petclinic](https://github.com/dongguk-creative-fusion-2026/demo-petclinic) | 커밋 이력이 긴 시연용 레포 |
 
 ## 바로 보기
