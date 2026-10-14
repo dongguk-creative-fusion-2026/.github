@@ -106,6 +106,7 @@ base / head 소스 인덱스 → 바뀐 메서드 · 호출부 · git 이력
 | 증거 테스트 | 본문만 바뀐 메서드마다 "base 통과 · head 실패" 테스트를 LLM 으로 생성해 함께 실행 → 동작 변화를 증명하면 MAJOR | 🧪 |
 | 런타임 트레이스 | 테스트 중 실제 호출 기록 → 바뀐 메서드를 지나간 테스트, 한 번도 실행되지 않은 변경은 MINOR | 🧪 |
 | 동작 diff | 관측 테스트가 바뀐 메서드를 여러 입력으로 불러 base · head 결과를 입력별로 맞댐 ("getPost(999): NotFoundException → null"). 리뷰 화면 맨 위에 표로 | 🧪 |
+| HTTP 동작 diff | 바뀐 컨트롤러 GET 엔드포인트를 base · head 에서 같은 요청(기존 테스트의 MockMvc 요청)으로 호출해 응답을 맞댐 ("GET /owners?lastName=Davis — base 302 리다이렉트, head 200 목록 화면"). 상태 · 리다이렉트 · 화면 · 모델 값 개수 · 예외 · JSON 본문. 상태를 바꾸는 POST 등은 보내지 않음 | 🧪 |
 
 ### 5. 판정 · PR 코멘트
 
